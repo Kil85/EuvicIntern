@@ -14,7 +14,7 @@ namespace EuvicIntern.Entities
             modelBuilder.Entity<User>().Property(u => u.LastName).IsRequired().HasMaxLength(15);
             modelBuilder.Entity<User>().Property(u => u.Email).IsRequired().HasMaxLength(35);
             modelBuilder.Entity<User>().Property(u => u.PhoneNumber).IsRequired();
+            modelBuilder.Entity<User>().Property(u => u.AveragePowerConsumption).HasPrecision(18, 3);
         }
-
     }
 }
