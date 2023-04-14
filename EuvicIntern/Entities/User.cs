@@ -14,5 +14,8 @@ namespace EuvicIntern.Entities
         public int? Age { get; set; }
         public Decimal? AveragePowerConsumption { get; set; }
 
+        public int RoleId { get; set; }
+        public virtual Role Role { get; set; }
+
     }
 }
