@@ -30,14 +30,23 @@ namespace EuvicIntern.Models.Validators
 
             RuleFor(r => r.PhoneNumber)
                 .NotEmpty()
-                .Matches(@"^\+?\d{2,3}[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{3}$");
+                .Matches(@"^[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{3}$");
 
             RuleFor(r => r.Age)
-                .GreaterThan(18)
+                .GreaterThan(17)
                 .WithMessage("Minimum age is 18")
                 .LessThan(120);
 
-            RuleFor(r => r.AveragePowerConsumption).ScalePrecision(3, 18);
+            RuleFor(r => r.AveragePowerConsumption).PrecisionScale(18, 3, true);
+
+            RuleFor(x => x.Email).Custom((value, context) =>
+            {
+                var result = dbContext.Users.Any(y => y.Email == value);
+                if (result)
+                {
+                    context.AddFailure("Email", "Email taken");
+                }
+            });
         }
     }
 }

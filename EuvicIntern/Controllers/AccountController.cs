@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EuvicIntern.Entities;
 using EuvicIntern.Models;
+using EuvicIntern.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EuvicIntern.Controllers
@@ -9,24 +10,19 @@ namespace EuvicIntern.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly EuvicDbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IAccountService _accountService;
 
-        public AccountController(EuvicDbContext dbContext, IMapper mapper)
+        public AccountController(IAccountService accountService)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            _accountService = accountService;
         }
 
         [HttpPost("register")]
         public ActionResult Register([FromBody] RegisterUserDto registerUser)
         {
-            var user = _mapper.Map<User>(registerUser);
-            user.HashedPassword = registerUser.Password;
+            _accountService.Register(registerUser);
 
-            _dbContext.Add(user);
-            _dbContext.SaveChanges();
-            return Ok(user);
+            return Ok();
         }
 
     }
