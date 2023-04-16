@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace EuvicIntern.Entities
+﻿namespace EuvicIntern.Entities
 {
     public class User
     {
@@ -16,6 +14,5 @@ namespace EuvicIntern.Entities
 
         public int RoleId { get; set; }
         public virtual Role Role { get; set; }
-
     }
 }

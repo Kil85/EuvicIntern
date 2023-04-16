@@ -9,6 +9,7 @@ namespace EuvicIntern
         public EuvicMappProfile()
         {
             CreateMap<RegisterUserDto, User>();
+            CreateMap<User, UserDto>();
         }
     }
 }

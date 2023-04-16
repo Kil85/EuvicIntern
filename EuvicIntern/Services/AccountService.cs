@@ -15,6 +15,7 @@ namespace EuvicIntern.Services
     {
         void Register(RegisterUserDto userDto);
         string Login(LoginDto loginDto);
+        IEnumerable<UserDto> GetAll();
     }
 
     public class AccountService : IAccountService
@@ -92,6 +93,17 @@ namespace EuvicIntern.Services
 
             var tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(token);
+        }
+
+        public IEnumerable<UserDto> GetAll()
+        {
+            var userList = _dbContext.Users.Include(u => u.Role).ToList();
+            var userDtoList = _mapper.Map<List<UserDto>>(userList);
+
+            if (userDtoList == null)
+                return null;
+
+            return userDtoList;
         }
     }
 }

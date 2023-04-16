@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NLog.Web;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,6 +50,12 @@ builder.Services.AddDbContext<EuvicDbContext>(
 );
 
 builder.Services.AddControllers().AddFluentValidation();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("admin", x => x.RequireClaim(ClaimTypes.Role, "Admin"));
+});
+
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserValidator>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();

@@ -34,5 +34,14 @@ namespace EuvicIntern.Controllers
 
             return Ok(jwtToken);
         }
+
+        [HttpGet("all")]
+        [Authorize("admin")]
+        public ActionResult All()
+        {
+            var result = _accountService.GetAll();
+
+            return Ok(result);
+        }
     }
 }
