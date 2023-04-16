@@ -8,10 +8,39 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using NLog.Web;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var authenticationSettings = new AuthenticationSettings();
+
+builder.Configuration.GetSection("JWTInfo").Bind(authenticationSettings);
+
+builder.Services.AddSingleton(authenticationSettings);
+
+builder.Services
+    .AddAuthentication(option =>
+    {
+        option.DefaultAuthenticateScheme = "Bearer";
+        option.DefaultScheme = "Bearer";
+        option.DefaultChallengeScheme = "Bearer";
+    })
+    .AddJwtBearer(cfg =>
+    {
+        cfg.RequireHttpsMetadata = false;
+        cfg.SaveToken = true;
+        cfg.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = authenticationSettings.JwtIssuer,
+            ValidAudience = authenticationSettings.JwtIssuer,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)
+            ),
+        };
+    });
 
 // Add services to the container.
 
@@ -28,6 +57,7 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<AccountSeeder>();
 
+builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 
 // Configure the HTTP request pipeline.
@@ -46,6 +76,8 @@ app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Registration Task");
 });
+
+app.UseAuthentication();
 
 app.UseHttpsRedirection();
 
