@@ -1,3 +1,4 @@
+using EuvicIntern;
 using EuvicIntern.Entities;
 using EuvicIntern.Middleware;
 using EuvicIntern.Models;
@@ -14,8 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<EuvicDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
-
+builder.Services.AddDbContext<EuvicDbContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"))
+);
 
 builder.Services.AddControllers().AddFluentValidation();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -24,22 +26,26 @@ builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddScoped<AccountSeeder>();
 
 builder.Host.UseNLog();
 
+// Configure the HTTP request pipeline.
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
 app.UseMiddleware<ErrorHandlingMiddleware>();
+
+var scope = app.Services.CreateScope();
+var seeder = scope.ServiceProvider.GetRequiredService<AccountSeeder>();
+
+seeder.Seeder();
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Registration Task");
 });
-
 
 app.UseHttpsRedirection();
 
