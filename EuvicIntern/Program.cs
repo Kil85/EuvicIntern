@@ -1,4 +1,5 @@
 using EuvicIntern;
+using EuvicIntern.Authorization;
 using EuvicIntern.Entities;
 using EuvicIntern.Middleware;
 using EuvicIntern.Models;
@@ -6,6 +7,7 @@ using EuvicIntern.Models.Validators;
 using EuvicIntern.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -58,6 +60,8 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserValidator>();
+builder.Services.AddScoped<IAuthorizationHandler, GetUserHandler>();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -66,6 +70,7 @@ builder.Services.AddScoped<AccountSeeder>();
 
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
+builder.Services.AddHttpContextAccessor();
 
 // Configure the HTTP request pipeline.
 

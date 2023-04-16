@@ -1,8 +1,11 @@
-﻿namespace EuvicIntern.Middleware
+﻿using EuvicIntern.Exceptions;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+
+namespace EuvicIntern.Middleware
 {
     public class ErrorHandlingMiddleware : IMiddleware
     {
-
         private readonly ILogger _logger;
 
         public ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> logger)
@@ -15,6 +18,21 @@
             try
             {
                 await next.Invoke(context);
+            }
+            catch (LoginFailedException userNotFound)
+            {
+                context.Response.StatusCode = 404;
+                await context.Response.WriteAsync(userNotFound.Message);
+            }
+            catch (NotFoundException notFound)
+            {
+                context.Response.StatusCode = 404;
+                await context.Response.WriteAsync(notFound.Message);
+            }
+            catch (AuthorizationFailedException authorizationFailed)
+            {
+                context.Response.StatusCode = 403;
+                await context.Response.WriteAsync(authorizationFailed.Message);
             }
             catch (Exception ex)
             {

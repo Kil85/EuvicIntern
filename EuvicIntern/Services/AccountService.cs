@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using EuvicIntern.Authorization;
 using EuvicIntern.Entities;
 using EuvicIntern.Exceptions;
 using EuvicIntern.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -16,6 +18,7 @@ namespace EuvicIntern.Services
         void Register(RegisterUserDto userDto);
         string Login(LoginDto loginDto);
         IEnumerable<UserDto> GetAll();
+        User GetUser(int id);
     }
 
     public class AccountService : IAccountService
@@ -24,18 +27,27 @@ namespace EuvicIntern.Services
         private readonly IMapper _mapper;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly AuthenticationSettings _authenticationSettings;
+        private readonly ILogger<AccountService> _logger;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IUserContextService _userContextService;
 
         public AccountService(
             IMapper mapper,
             EuvicDbContext dbContext,
             IPasswordHasher<User> passwordHasher,
-            AuthenticationSettings authenticationSettings
+            AuthenticationSettings authenticationSettings,
+            IAuthorizationService authorizationService,
+            ILogger<AccountService> logger,
+            IUserContextService userContextService
         )
         {
             _mapper = mapper;
             _dbContext = dbContext;
             _passwordHasher = passwordHasher;
             _authenticationSettings = authenticationSettings;
+            _authorizationService = authorizationService;
+            _logger = logger;
+            _userContextService = userContextService;
         }
 
         public void Register(RegisterUserDto userDto)
@@ -56,7 +68,7 @@ namespace EuvicIntern.Services
 
             if (user == null)
             {
-                throw new UserNotFoundException("Email or Password incorrect");
+                throw new LoginFailedException("Email or Password incorrect");
             }
 
             var isPasswordOk = _passwordHasher.VerifyHashedPassword(
@@ -67,7 +79,7 @@ namespace EuvicIntern.Services
 
             if (isPasswordOk == PasswordVerificationResult.Failed)
             {
-                throw new UserNotFoundException("Email or Password incorrect");
+                throw new LoginFailedException("Email or Password incorrect");
             }
 
             var claims = new List<Claim>()
@@ -104,6 +116,34 @@ namespace EuvicIntern.Services
                 return null;
 
             return userDtoList;
+        }
+
+        public User GetUser(int id)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            var whoIsAsking = _userContextService.GetUser.Claims
+                .FirstOrDefault(u => u.Type == ClaimTypes.Role)
+                .ToString();
+
+            var authorizationResult = _authorizationService
+                .AuthorizeAsync(
+                    _userContextService.GetUser,
+                    user,
+                    new GetUserRequirment(whoIsAsking)
+                )
+                .Result;
+
+            if (!authorizationResult.Succeeded)
+            {
+                throw new AuthorizationFailedException("You don't have access to this account");
+            }
+
+            return user;
         }
     }
 }

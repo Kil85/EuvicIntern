@@ -19,7 +19,6 @@ namespace EuvicIntern.Controllers
         }
 
         [HttpPost("register")]
-        [Authorize]
         public ActionResult Register([FromBody] RegisterUserDto registerUser)
         {
             _accountService.Register(registerUser);
@@ -42,6 +41,14 @@ namespace EuvicIntern.Controllers
             var result = _accountService.GetAll();
 
             return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public ActionResult Get([FromRoute] int id)
+        {
+            var user = _accountService.GetUser(id);
+            return Ok(user);
         }
     }
 }
