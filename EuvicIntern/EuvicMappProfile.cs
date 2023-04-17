@@ -10,6 +10,8 @@ namespace EuvicIntern
         {
             CreateMap<RegisterUserDto, User>();
             CreateMap<User, UserDto>();
+            CreateMap<User, ReturnUserDto>()
+                .ForMember(r => r.Role, u => u.MapFrom(x => x.Role.Name));
         }
     }
 }

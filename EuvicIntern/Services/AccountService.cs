@@ -18,7 +18,7 @@ namespace EuvicIntern.Services
         void Register(RegisterUserDto userDto);
         string Login(LoginDto loginDto);
         IEnumerable<UserDto> GetAll();
-        User GetUser(int id);
+        ReturnUserDto GetUser(int id);
     }
 
     public class AccountService : IAccountService
@@ -118,9 +118,9 @@ namespace EuvicIntern.Services
             return userDtoList;
         }
 
-        public User GetUser(int id)
+        public ReturnUserDto GetUser(int id)
         {
-            var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
+            var user = _dbContext.Users.Include(r => r.Role).FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
                 throw new NotFoundException("User not found");
@@ -143,7 +143,9 @@ namespace EuvicIntern.Services
                 throw new AuthorizationFailedException("You don't have access to this account");
             }
 
-            return user;
+            var result = _mapper.Map<ReturnUserDto>(user);
+
+            return result;
         }
     }
 }
