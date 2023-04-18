@@ -128,7 +128,7 @@ namespace EuvicIntern.Services
 
             var whoIsAsking = _userContextService.GetUser.Claims
                 .FirstOrDefault(u => u.Type == ClaimTypes.Role)
-                .ToString();
+                .Value;
 
             var authorizationResult = _authorizationService
                 .AuthorizeAsync(

@@ -1,6 +1,4 @@
 ﻿using EuvicIntern.Exceptions;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 
 namespace EuvicIntern.Middleware
 {
