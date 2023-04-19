@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EuvicIntern.Authentication;
 using EuvicIntern.Authorization;
 using EuvicIntern.Entities;
 using EuvicIntern.Exceptions;

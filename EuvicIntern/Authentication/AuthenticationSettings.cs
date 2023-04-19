@@ -1,4 +1,4 @@
-﻿namespace EuvicIntern
+﻿namespace EuvicIntern.Authentication
 {
     public class AuthenticationSettings
     {

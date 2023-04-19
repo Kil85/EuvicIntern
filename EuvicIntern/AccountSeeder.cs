@@ -24,19 +24,22 @@ namespace EuvicIntern
 
         public void Seeder()
         {
-            try
+            if (_context.Database.IsRelational())
             {
-                var migrations = _context.Database.GetPendingMigrations();
-
-                if (migrations.Any())
+                try
                 {
-                    _context.Database.Migrate();
+                    var migrations = _context.Database.GetPendingMigrations();
+
+                    if (migrations.Any())
+                    {
+                        _context.Database.Migrate();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                Environment.Exit(500);
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    Environment.Exit(500);
+                }
             }
 
             if (_context.Database.CanConnect())
