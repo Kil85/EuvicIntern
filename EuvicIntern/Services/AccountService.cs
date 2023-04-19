@@ -16,7 +16,7 @@ namespace EuvicIntern.Services
 {
     public interface IAccountService
     {
-        void Register(RegisterUserDto userDto);
+        int Register(RegisterUserDto userDto);
         string Login(LoginDto loginDto);
         IEnumerable<UserDto> GetAll();
         ReturnUserDto GetUser(int id);
@@ -51,7 +51,7 @@ namespace EuvicIntern.Services
             _userContextService = userContextService;
         }
 
-        public void Register(RegisterUserDto userDto)
+        public int Register(RegisterUserDto userDto)
         {
             var user = _mapper.Map<User>(userDto);
             var hashedPassword = _passwordHasher.HashPassword(user, userDto.Password);
@@ -59,6 +59,7 @@ namespace EuvicIntern.Services
 
             _dbContext.Add(user);
             _dbContext.SaveChanges();
+            return user.Id;
         }
 
         public string Login(LoginDto loginDto)

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.Identity.Client;
 using System.Security.Claims;
 
-namespace EuvicIntern.IntegrationTests
+namespace EuvicIntern.IntegrationTests.Fakers
 {
     public class FakePolicyEvaluator : IPolicyEvaluator
     {

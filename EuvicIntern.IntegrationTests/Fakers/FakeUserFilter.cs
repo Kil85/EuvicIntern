@@ -2,7 +2,7 @@
 using NLog.Web.LayoutRenderers;
 using System.Security.Claims;
 
-namespace EuvicIntern.IntegrationTests
+namespace EuvicIntern.IntegrationTests.Fakers
 {
     public class FakeUserFilter : IAsyncActionFilter
     {

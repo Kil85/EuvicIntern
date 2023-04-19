@@ -21,9 +21,9 @@ namespace EuvicIntern.Controllers
         [HttpPost("register")]
         public ActionResult Register([FromBody] RegisterUserDto registerUser)
         {
-            _accountService.Register(registerUser);
+            var userId = _accountService.Register(registerUser);
 
-            return Ok();
+            return Created($"/api/account/{userId}", null);
         }
 
         [HttpPost("login")]

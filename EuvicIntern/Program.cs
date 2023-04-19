@@ -64,6 +64,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserValidator>();
 builder.Services.AddScoped<IAuthorizationHandler, GetUserHandler>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
@@ -81,6 +82,7 @@ builder.Services.AddSwaggerGen(c =>
     );
     c.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<AccountSeeder>();
