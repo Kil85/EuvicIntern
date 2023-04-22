@@ -1,0 +1,26 @@
+[
+    {
+      "FirstName": "Erling",
+      "LastName": "Haaland",
+      "Password": "passworD123!",
+      "ConfirmPassword": "passworD123!",
+      "Email": "Haaland@City.en",
+      "PhoneNumber": "123456789"
+    },
+    {
+      "FirstName": "Phil",
+      "LastName": "Foden",
+      "Password": "InternTaks321@",
+      "ConfirmPassword": "InternTaks321@",
+      "Email": "Foden@City.en",
+      "PhoneNumber": "123456789"
+    },
+    {
+      "FirstName": "Kamil",
+      "LastName": "Stoch",
+      "Password": "GarbikFajeczka111!",
+      "ConfirmPassword": "GarbikFajeczka111!",
+      "Email": "Stoch@fis.pl",
+      "PhoneNumber": "333 333 333"
+    }
+]

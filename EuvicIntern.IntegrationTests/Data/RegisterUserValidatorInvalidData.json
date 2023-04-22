@@ -1,0 +1,31 @@
+[
+  {
+    "FirstName": "Phil",
+    "Password": "InternTaks321?",
+    "ConfirmPassword": "InternTaks321?",
+    "Email": "Foden@City.en",
+    "PhoneNumber": "123456789"
+  },
+  {
+    "FirstName": "Phil",
+    "LastName": "Foden",
+    "Password": "InternTaks321@",
+    "ConfirmPassword": "InternTaks321@",
+    "Email": "FodenCity.en",
+    "PhoneNumber": "123456789"
+  },
+  {
+    "LastName": "Foden",
+    "Password": "InternTaks321,",
+    "ConfirmPassword": "InternTaks321,!",
+    "Email": "Foden@City.en",
+    "PhoneNumber": "1234567890"
+  },
+  {
+    "FirstName": "Phil",
+    "LastName": "Foden",
+    "Password": "InternTask",
+    "ConfirmPassword": "InternTask",
+    "Email": "Foden@City.en"
+  }
+]
