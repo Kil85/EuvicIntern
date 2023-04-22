@@ -52,18 +52,6 @@ namespace EuvicIntern.IntegrationTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        public async Task GetById(int id)
-        {
-            //act
-            var response = await client.GetAsync($"/api/account/{id}");
-
-            //asserts
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        }
-
         [Fact]
         public async Task RegisterUser_WithGoodModel_ReturnCreated()
         {

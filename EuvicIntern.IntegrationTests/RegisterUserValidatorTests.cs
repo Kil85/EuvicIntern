@@ -29,16 +29,6 @@ namespace EuvicIntern.IntegrationTests
             //arrange
             var validator = new RegisterUserValidator(_dbContext);
 
-            //var model = new RegisterUserDto
-            //{
-            //    FirstName = "Erling",
-            //    LastName = "Haaland",
-            //    Password = "passworD123!",
-            //    ConfirmPassword = "passworD123!",
-            //    Email = "Haaland@City.en",
-            //    PhoneNumber = "123456789",
-            //};
-
             //act
 
             var result = validator.TestValidate(model);

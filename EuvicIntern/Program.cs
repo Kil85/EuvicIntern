@@ -23,6 +23,8 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Authentication Section
+
 var authenticationSettings = new AuthenticationSettings();
 
 builder.Configuration.GetSection("JWTInfo").Bind(authenticationSettings);
@@ -50,21 +52,23 @@ builder.Services
         };
     });
 
-// Add services to the container.
+//Database Section
 
 builder.Services.AddDbContext<EuvicDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"))
 );
 
-builder.Services.AddControllers().AddFluentValidation();
+//Authorization Section
 
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("admin", x => x.RequireClaim(ClaimTypes.Role, "Admin"));
 });
 
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+//Services Registration
 
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddControllers().AddFluentValidation();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserValidator>();
 builder.Services.AddScoped<IAuthorizationHandler, GetUserHandler>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
@@ -87,8 +91,12 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<AccountSeeder>();
 
+//Logging Configuration
+
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
+
+//Others
 builder.Services.AddHttpContextAccessor();
 
 // Configure the HTTP request pipeline.

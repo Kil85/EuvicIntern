@@ -18,8 +18,8 @@ namespace EuvicIntern.Services
     {
         int Register(RegisterUserDto userDto);
         string Login(LoginDto loginDto);
-        IEnumerable<UserDto> GetAll();
-        ReturnUserDto GetUser(int id);
+        IEnumerable<UserDto> GetAllUsers();
+        ReturnUserDto GetUserById(int id);
     }
 
     public class AccountService : IAccountService
@@ -109,7 +109,7 @@ namespace EuvicIntern.Services
             return tokenHandler.WriteToken(token);
         }
 
-        public IEnumerable<UserDto> GetAll()
+        public IEnumerable<UserDto> GetAllUsers()
         {
             var userList = _dbContext.Users.Include(u => u.Role).ToList();
             var userDtoList = _mapper.Map<List<UserDto>>(userList);
@@ -120,7 +120,7 @@ namespace EuvicIntern.Services
             return userDtoList;
         }
 
-        public ReturnUserDto GetUser(int id)
+        public ReturnUserDto GetUserById(int id)
         {
             var user = _dbContext.Users.Include(r => r.Role).FirstOrDefault(u => u.Id == id);
             if (user == null)

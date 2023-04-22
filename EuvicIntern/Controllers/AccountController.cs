@@ -36,18 +36,18 @@ namespace EuvicIntern.Controllers
 
         [HttpGet("all")]
         [Authorize("admin")]
-        public ActionResult All()
+        public ActionResult GetAllUsers()
         {
-            var result = _accountService.GetAll();
+            var result = _accountService.GetAllUsers();
 
             return Ok(result);
         }
 
         [HttpGet("{id}")]
         [Authorize]
-        public ActionResult Get([FromRoute] int id)
+        public ActionResult GetById([FromRoute] int id)
         {
-            var user = _accountService.GetUser(id);
+            var user = _accountService.GetUserById(id);
             return Ok(user);
         }
     }
